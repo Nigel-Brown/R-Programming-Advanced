@@ -15,7 +15,6 @@ data <- data[,-1]
 regressor <- svm(Salary ~., data, type = 'eps-regression', kernel = 'radial')
 summary(regressor)
 
-
 # predicting a salary
 y_pred <-  predict(regressor, data.frame(Level = 6.5))
 y_pred
@@ -29,7 +28,8 @@ ggplot() +
   theme_light() +
   labs(
     title = "Truth or Bluff",
-    subtitle = "Non Linear SVR Model"
-)
+
+    subtitle = "SVR Regression Model"
+  )
 
 

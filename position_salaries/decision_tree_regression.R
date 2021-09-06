@@ -16,6 +16,7 @@ regressor <- rpart(Salary ~., data, control = rpart.control(minsplit = 1))
 summary(regressor)
 
 
+
 # predicting a salary
 y_pred <-  predict(regressor, data.frame(Level = 6.5))
 y_pred

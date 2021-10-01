@@ -2,17 +2,19 @@ library(readr)
 library(magrittr)
 library(rsample)
 library(ggplot2)
-library(rpart)
+library(randomForest)
 
 data <-  read_csv(here::here('position_salaries',"Position_Salaries.csv"))
 
 data <- data[,-1]
 
-#set.seed(123)
+set.seed(1234)
 #split <- initial_split(data, prop = 0.8)
 
 # fit decision tree model
-regressor <- rpart(Salary ~., data)
+regressor <- randomForest(x = data[1],
+                          y = data$Salary,
+                          ntree = 500)
 summary(regressor)
 
 
@@ -30,5 +32,5 @@ ggplot() +
     title = "Truth or Bluff",
     subtitle = "Random Forest Regression"
   )
-
+  
 

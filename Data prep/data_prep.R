@@ -16,7 +16,7 @@ fin$ID <- factor(fin$ID)
 fin$Inception <- factor(fin$Inception)
 
 # Factor Variable Trap (FVT) ----
-#Converting into numericsFor characters
+#Converting into numerics for characters
 a <- c("12","13", "14", "12", "12")
 typeof(a)
 
@@ -37,7 +37,6 @@ typeof(y)
 x <- as.numeric(as.character(z))
 x
 typeof(x)
-
 
 # FVT Example -------------------------
 

@@ -20,12 +20,6 @@ dataset$y <- ts(dataset$y,
                 frequency = 365,
                 start =c(2013, yday(min(dataset$Date))))
 
-plot.ts(dataset$y,
-        ylab = "Demand",
-        xlab = 'Time',
-        main = 'Homeless Shelter Occupancy')
-
-
 # Training and test set -----
 train_set = subset(dataset, dataset$Date <= '2020-09-30')
 test_set = subset(dataset, dataset$Date > '2020-09-30')
@@ -35,67 +29,48 @@ train_set$y <- ts(train_set$y,
                   frequency = 365,
                   start = c(2013, yday(min(train_set$Date))))
 
-# Stationarity check ----
-ndiffs(train_set$y, alpha = 0.05, test = c("adf"))
-
-# Set the regressors ----
-train_reg = as.matrix(train_set[,3:5])
-test_reg = as.matrix(test_set[,3:5])
-
 # Modelling ----
-sarimax_model = auto.arima(train_set$y, 
-                           xreg = train_reg)
-summary(sarimax_model)
+tbats_model = tbats(train_set$y, 
+                    seasonal.periods = c(7, 365.25))
+
 
 # Forecasting ----
-preds_sarimax = forecast(sarimax_model, xreg = test_reg)
+preds_tbats = forecast(tbats_model, 
+                       h = nrow(test_set))
 
 #Plotting
-plot(preds_sarimax,
-     main = 'SARMIMAX',
+plot(preds_tbats,
+     main = 'TBATS',
      ylab = 'Demand',
      xlab = 'Time')
 
 #accuracy
-accuracy(preds_sarimax$mean, test_set$y)
+accuracy(preds_tbats$mean, test_set$y)
 
 # future -----
 
-# Regressors ----
-train_reg = as.matrix(dataset[,3:5])
-test_reg = as.matrix(future[,3:5])
 
 # Model -----
-sarimax_model = auto.arima(dataset$y, 
-                           xreg = train_reg)
-summary(sarimax_model)
+tbats_model = tbats(dataset$y,
+                    seasonal.periods = c(7, 365.25))
 
 # Forecast ----
-future_sarimax = forecast(sarimax_model, 
-                          xreg = test_reg)
+future_tbats = forecast(tbats_model, 
+                        h = nrow(test_set))
 
 # Plot ----
-plot(future_sarimax, 
+plot(future_tbats, 
      ylab = 'Demand',
      xlab = 'Time',
-     main = 'SARIMAX')
+     main = 'TBATS')
 
 # save the forecasts -----
-write.csv(preds_sarimax$mean,
-          here::here('time series in R', 'ensemble', 'forecast', 'preds_sarimax.csv'),
+write.csv(preds_tbats$mean,
+          here::here('time series in R', 'ensemble', 'forecast', 'preds_tbats.csv'),
           row.names = FALSE)
 
-write.csv(future_sarimax$mean, 
-          here::here('time series in R', 'ensemble', 'future', 'future_sarimax.csv'),
+write.csv(future_tbats$mean, 
+          here::here('time series in R', 'ensemble', 'future', 'future_tbats.csv'),
           row.names = FALSE)
-
-
-
-
-
-
-
-
-
 
 

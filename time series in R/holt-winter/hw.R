@@ -78,11 +78,13 @@ future_hw = forecast(hw_model,
 plot(future_hw)
 
 # save HW forecasts -----
-write_csv(preds_hw$mean,
-          here::here('time series in R', 'ensemble', 'preds_hw.csv'))
+write.csv(preds_hw$mean,
+          here::here('time series in R', 'ensemble', 'forecast', 'preds_hw.csv'),
+          row.names = FALSE)
 
-write_csv(future_hw$mean, 
-          here::here('time series in R', 'ensemble', 'future_hw.csv'))
+write.csv(future_hw$mean, 
+          here::here('time series in R', 'ensemble', 'future', 'future_hw.csv'),
+          row.names = FALSE)
 
 
 
